@@ -288,7 +288,9 @@ func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
     }
 }
 
-
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        loadProduct()
+    }
 }
 
 extension ViewController:UITableViewDelegate,UITableViewDataSource
