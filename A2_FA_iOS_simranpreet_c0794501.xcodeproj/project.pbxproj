@@ -14,6 +14,8 @@
 		5BB9395F25C5BB5B00010ACE /* A2_FA_iOS_simranpreet_c0794501.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5BB9395D25C5BB5B00010ACE /* A2_FA_iOS_simranpreet_c0794501.xcdatamodeld */; };
 		5BB9396125C5BB5F00010ACE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5BB9396025C5BB5F00010ACE /* Assets.xcassets */; };
 		5BB9396425C5BB5F00010ACE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5BB9396225C5BB5F00010ACE /* LaunchScreen.storyboard */; };
+		5BD6D27A25C5C3C100771CE9 /* DetailTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BD6D27925C5C3C100771CE9 /* DetailTableViewController.swift */; };
+		5BD6D27D25C5C77000771CE9 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BD6D27C25C5C77000771CE9 /* DetailViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +28,8 @@
 		5BB9396025C5BB5F00010ACE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5BB9396325C5BB5F00010ACE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5BB9396525C5BB5F00010ACE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5BD6D27925C5C3C100771CE9 /* DetailTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailTableViewController.swift; sourceTree = "<group>"; };
+		5BD6D27C25C5C77000771CE9 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +66,8 @@
 				5BB9395625C5BB5B00010ACE /* SceneDelegate.swift */,
 				5BB9395825C5BB5B00010ACE /* ViewController.swift */,
 				5BB9395A25C5BB5B00010ACE /* Main.storyboard */,
+				5BD6D27C25C5C77000771CE9 /* DetailViewController.swift */,
+				5BD6D27925C5C3C100771CE9 /* DetailTableViewController.swift */,
 				5BB9396025C5BB5F00010ACE /* Assets.xcassets */,
 				5BB9396225C5BB5F00010ACE /* LaunchScreen.storyboard */,
 				5BB9396525C5BB5F00010ACE /* Info.plist */,
@@ -141,7 +147,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				5BB9395925C5BB5B00010ACE /* ViewController.swift in Sources */,
+				5BD6D27A25C5C3C100771CE9 /* DetailTableViewController.swift in Sources */,
 				5BB9395525C5BB5B00010ACE /* AppDelegate.swift in Sources */,
+				5BD6D27D25C5C77000771CE9 /* DetailViewController.swift in Sources */,
 				5BB9395725C5BB5B00010ACE /* SceneDelegate.swift in Sources */,
 				5BB9395F25C5BB5B00010ACE /* A2_FA_iOS_simranpreet_c0794501.xcdatamodeld in Sources */,
 			);
