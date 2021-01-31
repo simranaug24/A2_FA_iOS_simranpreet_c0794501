@@ -289,7 +289,7 @@ func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
 }
 
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        loadProduct()
+        loadProduct() // 
     }
 }
 
