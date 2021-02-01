@@ -1,15 +1,15 @@
 //
-//  ViewController.swift
+//  ProductTVC.swift
 //  A2_FA_iOS_simranpreet_c0794501
 //
-//  Created by simranPreet KAur on 30/01/21.
+//  Created by simranPreet KAur on 02/02/21.
 //
 
 import UIKit
 import CoreData
-class ViewController: UIViewController, UISearchBarDelegate, UISearchControllerDelegate  {
 
-    @IBOutlet weak var tableView: UITableView!
+class ProductTVC: UITableViewController, UISearchBarDelegate, UISearchControllerDelegate {
+
     var productData = [Product]()
     
    
@@ -20,41 +20,148 @@ class ViewController: UIViewController, UISearchBarDelegate, UISearchControllerD
     
     
     let searchController = UISearchController(searchResultsController: nil)
+
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
-        
-        
+
         showSearchBar()
         searchController.delegate = self
         
       loadProduct()
-        //saveProduct()
+       // saveProducts()
         
+        self.navigationItem.rightBarButtonItem = self.editButtonItem
+        
+
+
+    }
+
+    // MARK: - Table view data source
+
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        // #warning Incomplete implementation, return the number of sections
+        return 1
+    }
+
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        // #warning Incomplete implementation, return the number of rows
+        return productData.count
+    }
+
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "productCell", for: indexPath)
+
+        cell.textLabel?.text = productData[indexPath.row].productName
+
+        return cell
+    }
+
     
+    // Override to support conditional editing of the table view.
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        // Return false if you do not want the specified item to be editable.
+        return true
+    }
+    
+
+    
+    // Override to support editing the table view.
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            // Delete the row from the data source
+            
+            deleteProduct(product: productData[indexPath.row])
+            saveProduct()
+            productData.remove(at: indexPath.row)
+            
+            
+            
+            tableView.deleteRows(at: [indexPath], with: .fade)
+        } else if editingStyle == .insert {
+            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+        }    
+    }
+    
+
+    /*
+    // Override to support rearranging the table view.
+    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
+
+    }
+    */
+
+    /*
+    // Override to support conditional rearranging of the table view.
+    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+        // Return false if you do not want the item to be re-orderable.
+        return true
+    }
+    */
+
+    /*
+    // MARK: - Navigation
+
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // Get the new view controller using segue.destination.
+        // Pass the selected object to the new view controller.
+    }
+    */
+    
+    
+    
+    
+    // MARK:  deleteProduct
+    func deleteProduct(product:Product)
+    {
+        context.delete(product)
+    }
+    
+    // MARK: updateProduct
+    func updateProduct(name:String,id:String,price:String,provider:String,descript:String)
+    {
+        let newProduct = Product(context: context)
+        newProduct.productName = name
+        newProduct.productID = id
+        newProduct.productPrice = price
+        newProduct.productProvider = provider
+        newProduct.productDescription = descript
         
-  /*
-        let newProduct = NSEntityDescription.insertNewObject(forEntityName: "Product", into: context)
-  
-        newProduct.setValue("", forKey: "productID")
-        newProduct.setValue("", forKey: "produxtName")
-        newProduct.setValue("", forKey: "productPrice")
-        */
-        tableView.delegate = self
-        tableView.dataSource = self
+        saveProduct()
+        loadProduct()
+        
+    }
+    
+    //MARK: saveProduct
+    
+    func saveProduct()
+    {
+        do
+{
+        try context.save()
+        }
+        catch
+        {
+            print(error)
+        }
+        tableView.reloadData()
     }
     
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?)
     {
-         let destination = segue.destination as! DetailViewController
-        
-             let indexPath = tableView.indexPathForSelectedRow
-            
-                
-        destination.selectedProduct = productData[indexPath!.row]
-            
-           
+        if let destination = segue.destination as? DetailViewController
+        {
+            destination.delegate = self
+            if let cell = sender as? UITableViewCell
+            {
+                if let index = tableView.indexPath(for: cell)?.row
+                {
+                    destination.selectedProduct = productData[index]
+                }
+            }
+        }
         
     }
     func showSearchBar() {
@@ -69,6 +176,7 @@ class ViewController: UIViewController, UISearchBarDelegate, UISearchControllerD
     func loadProduct(predicate: NSPredicate? = nil)
     {
         let result : NSFetchRequest<Product> = Product.fetchRequest()
+        result.sortDescriptors = [NSSortDescriptor(key: "productName", ascending: true)]
         
         if let additionalPredicate = predicate {
                     result.predicate = additionalPredicate
@@ -77,20 +185,23 @@ class ViewController: UIViewController, UISearchBarDelegate, UISearchControllerD
         
         do{
             productData = try context.fetch(result)
-            tableView.reloadData()
+            
         }
         catch
         {
             print(error)
         }
+        tableView.reloadData()
     }
     
-    func saveProduct()
+    
+    
+    func saveProducts()
     {
         let newProdcut = Product(context: context)
         newProdcut.productName = "iphone 8"
-        newProdcut.productID = 123
-        newProdcut.productPrice = 800
+        newProdcut.productID = "123"
+        newProdcut.productPrice = " 800"
         newProdcut.productProvider = "Apple"
         newProdcut.productDescription = """
         this is iphone 8
@@ -115,8 +226,8 @@ class ViewController: UIViewController, UISearchBarDelegate, UISearchControllerD
         
         let newProdcut1 = Product(context: context)
         newProdcut1.productName = "Red mi note 9 pro"
-        newProdcut1.productID = 124
-        newProdcut1.productPrice = 1000
+        newProdcut1.productID = "124"
+        newProdcut1.productPrice = "1000"
         newProdcut1.productProvider = "mi"
         newProdcut1.productDescription = """
 The Redmi Note 9 Pro Max takes a giant leap in the Note journey.This smartphone features an unbeatable 64MP Quad Camera array that combines a powerful 64MP primary sensor, 8MP ultra-wide angle lens, a dedicated 5MP macro camera and a 2MP depth sensor, so you can dabble in truly pro photography. The Qualcomm® Snapdragon™ 720G delivers truly elite gaming with the Adreno 618 GPU and you can game non-stop for 14 hours with the massive 5020mAh battery
@@ -125,8 +236,8 @@ The Redmi Note 9 Pro Max takes a giant leap in the Note journey.This smartphone 
         
         let newProdcut2 = Product(context: context)
         newProdcut2.productName = "Google Nest Mini"
-        newProdcut2.productID = 125
-        newProdcut2.productPrice = 8000
+        newProdcut2.productID = "125"
+        newProdcut2.productPrice = "8000"
         newProdcut2.productProvider = "google"
         newProdcut2.productDescription = """
 The small and mighty smart speaker that you control with your voice.
@@ -139,8 +250,8 @@ Nest Mini sounds bigger and richer, with more power and 40% stronger bass1 to fi
         
         let newProdcut3 = Product(context: context)
         newProdcut3.productName = "Creative MUVO Play "
-        newProdcut3.productID = 126
-        newProdcut3.productPrice = 8580
+        newProdcut3.productID = "126"
+        newProdcut3.productPrice = "8580"
         newProdcut3.productProvider = "creative"
         newProdcut3.productDescription = """
             The Creative MUVO Play is our latest portable and IPX7-certified waterproof Bluetooth speaker that is packed full of features. With dual micro drivers and dual bass radiators, MUVO Play sounds larger than it is! Designed for the outdoors, it is lightweight at 360g (12.6 oz), so you can bring it along with you to pool parties, camping trips, or your next exciting adventure!
@@ -149,8 +260,8 @@ Nest Mini sounds bigger and richer, with more power and 40% stronger bass1 to fi
         
         let newProdcut4 = Product(context: context)
         newProdcut4.productName = "iphone 12 pro"
-        newProdcut4.productID = 127
-        newProdcut4.productPrice = 1250
+        newProdcut4.productID = "127"
+        newProdcut4.productPrice = "1250"
         newProdcut4.productProvider = "Apple"
         newProdcut4.productDescription = """
 This is iphone 12 pro
@@ -168,8 +279,8 @@ Compatible with MagSafe accessories.
         
         let newProdcut5 = Product(context: context)
         newProdcut5.productName = "Apple Watch Series 6"
-        newProdcut5.productID = 128
-        newProdcut5.productPrice = 6775
+        newProdcut5.productID = "128"
+        newProdcut5.productPrice = "6775"
         newProdcut5.productProvider = "Apple"
         newProdcut5.productDescription =
             """
@@ -192,8 +303,8 @@ Water resistant to 50 metres5
         
         let newProdcut6 = Product(context: context)
         newProdcut6.productName = "MacBook Pro 13"
-        newProdcut6.productID = 129
-        newProdcut6.productPrice = 1500
+        newProdcut6.productID = "129"
+        newProdcut6.productPrice = "1500"
         newProdcut6.productProvider = "Apple"
         newProdcut6.productDescription =
         """
@@ -209,8 +320,8 @@ Water resistant to 50 metres5
         
         let newProdcut7 = Product(context: context)
         newProdcut7.productName = "Hp Chromebook"
-        newProdcut7.productID = 120
-        newProdcut7.productPrice = 8200
+        newProdcut7.productID = "120"
+        newProdcut7.productPrice = "8200"
         newProdcut7.productProvider = "hp"
         newProdcut7.productDescription =
             """
@@ -229,8 +340,8 @@ Water resistant to 50 metres5
         
         let newProdcut8 = Product(context: context)
         newProdcut8.productName = "Airpods"
-        newProdcut8.productID = 121
-        newProdcut8.productPrice = 500
+        newProdcut8.productID = "121"
+        newProdcut8.productPrice = "500"
         newProdcut8.productProvider = "one plus"
         newProdcut8.productDescription =
             """
@@ -240,8 +351,8 @@ OnePlus Buds and OnePlus phones, when used together, will provide the best exper
         
         let newProdcut9 = Product(context: context)
         newProdcut9.productName = "iPad mini"
-        newProdcut9.productID = 122
-        newProdcut9.productPrice = 8550
+        newProdcut9.productID = "122"
+        newProdcut9.productPrice = "8550"
         newProdcut9.productProvider = "Apple"
         newProdcut9.productDescription =
             """
@@ -289,32 +400,7 @@ func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
 }
 
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        loadProduct() // 
+        loadProduct() //
     }
 }
-
-extension ViewController:UITableViewDelegate,UITableViewDataSource
-{
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
-    {
-        return productData.count
-    }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
-    {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "product_cell", for: indexPath)
-        cell.textLabel?.text = productData[indexPath.row].productName
-        return cell
-    }
-    
-    func numberOfSections(in tableView: UITableView) -> Int
-    {
-        
-        
-        return 1
-    }
-}
-
-
-
-

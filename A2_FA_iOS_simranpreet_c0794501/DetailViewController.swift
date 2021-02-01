@@ -16,9 +16,9 @@ class DetailViewController: UIViewController {
     @IBOutlet weak var provider: UITextField!
     
     @IBOutlet weak var info: UITextView!
-    
+    var delegate : ProductTVC?
     var product = [Product]()
-    
+    var editEnable : Bool = false
     var context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     
@@ -26,14 +26,15 @@ class DetailViewController: UIViewController {
     {
         didSet
         {
-            loadProduct()
+            editEnable = true
+          //  loadProduct()
         }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        loadProduct()
+        //loadProduct()
         showData()
         // Do any additional setup after loading the view.
     }
@@ -58,12 +59,20 @@ class DetailViewController: UIViewController {
     func showData ()
     {
         name.text = selectedProduct?.productName
-       id.text = String(selectedProduct!.productID)
-        price.text = String(selectedProduct!.productPrice)
+       id.text = selectedProduct!.productID
+        price.text = selectedProduct!.productPrice
         provider.text = selectedProduct!.productProvider
         info.text = selectedProduct?.productDescription
     }
     
+    override func viewWillDisappear(_ animated: Bool)
+    {
+        if editEnable
+        {
+            delegate!.deleteProduct(product:selectedProduct!)
+        }
+        delegate!.updateProduct(name:name.text!,id:id.text!,price:price.text!,provider:provider.text!,descript:info.text!)
+    }
 
     /*
     // MARK: - Navigation
